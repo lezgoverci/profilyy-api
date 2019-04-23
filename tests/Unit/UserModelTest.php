@@ -27,11 +27,7 @@ class UserModelTest extends TestCase
     public function testUserModelHasAnAccountRelationship()
     {
 
-        $users = factory(\App\User::class,1)
-            ->create()
-            ->each(function($user){
-                $user->account()->save(factory(\App\Account::class)->make());
-            });
-        $this->assertNotNull($users);
+        $user = factory(\App\User::class)->make();
+        $this->assertNotNull($user->account());
     }
 }
