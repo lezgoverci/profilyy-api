@@ -10,6 +10,15 @@ class UserCreateResourceApiTest extends TestCase
 {
     //CREATE
 
+    $new_user = [
+        'fname' => 'John',
+        'lname' => 'Doe',
+        'address' => 'Butuan City, Philippines',
+        'email' => 'john.doe@email.com',
+        'phone' => '1234 567 8900',
+        'gender' => 'male'
+    ];
+
     /**
      * Test user create resource api unauthenticated
      *
@@ -17,7 +26,8 @@ class UserCreateResourceApiTest extends TestCase
      */
     public function testUserCreateResourceApiUnauthenticated()
     {
-
+        $reponse = $this->json('POST','/api/user',$new_user);
+        $reponse->assertSuccessful();
     }
 
     /**
@@ -27,6 +37,14 @@ class UserCreateResourceApiTest extends TestCase
      */
     public function testUserCreateResourceApiAuthenticatedUnauthorized()
     {
+        $account = factory(\App\Account::class)->make(['role'=>'applicant']);
+
+        $response = $this->actingAs($account->user())
+                        ->withSession(['role' => $account->role])
+                        ->json('POST','/api/user',$new_user);
+
+        $response->assertForbidden();
+
 
     }
 
@@ -37,7 +55,11 @@ class UserCreateResourceApiTest extends TestCase
      */
     public function testUserCreateResourceApiAuthenticatedAuthorized()
     {
-
+        $account = factory(\App\Account::class)->make(['role' => 'admin']);
+        $response = $this->actingAs($account->user())
+                        ->withSession(['role' => $account->role])
+                        ->json('POST','/api/user',$new_user);
+        $response->assertSuccessful();
     }
 
 }
