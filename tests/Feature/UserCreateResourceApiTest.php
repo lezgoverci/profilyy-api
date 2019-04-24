@@ -8,58 +8,44 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserCreateResourceApiTest extends TestCase
 {
-    //CREATE
-
-    $new_user = [
-        'fname' => 'John',
-        'lname' => 'Doe',
-        'address' => 'Butuan City, Philippines',
-        'email' => 'john.doe@email.com',
-        'phone' => '1234 567 8900',
-        'gender' => 'male'
-    ];
+    //CREATE  
 
     /**
-     * Test user create resource api unauthenticated
+     * Test user create resource api public
      *
      * @return void
      */
-    public function testUserCreateResourceApiUnauthenticated()
+    public function testUserCreateResourceApiPublic()
     {
-        $reponse = $this->json('POST','/api/user',$new_user);
-        $reponse->assertSuccessful();
+        $data = [
+            'fname' => 'John',
+            'lname' => 'Doe',
+            'address' => 'Butuan City, Philippines',
+            'email' => 'john.doe1@email.com',
+            'phone' => '1234 567 8900',
+            'gender' => 'male',
+        ];
+        $response = $this->json('POST','/api/user',$data);
+        $response->assertStatus(201); // created successfully
     }
 
     /**
-     * Test user create resource api authenticated and unauthorized
+     * Test user create resource api public duplicate email
      *
      * @return void
      */
-    public function testUserCreateResourceApiAuthenticatedUnauthorized()
+    public function testUserCreateResourceApiPublicDuplicateEmail()
     {
-        $account = factory(\App\Account::class)->make(['role'=>'applicant']);
-
-        $response = $this->actingAs($account->user())
-                        ->withSession(['role' => $account->role])
-                        ->json('POST','/api/user',$new_user);
-
-        $response->assertForbidden();
-
-
-    }
-
-    /**
-     * Test user create resource api authenticated and authorized
-     *
-     * @return void
-     */
-    public function testUserCreateResourceApiAuthenticatedAuthorized()
-    {
-        $account = factory(\App\Account::class)->make(['role' => 'admin']);
-        $response = $this->actingAs($account->user())
-                        ->withSession(['role' => $account->role])
-                        ->json('POST','/api/user',$new_user);
-        $response->assertSuccessful();
+        $data = [
+            'fname' => 'John',
+            'lname' => 'Doe',
+            'address' => 'Butuan City, Philippines',
+            'email' => 'john.doe1@email.com',
+            'phone' => '1234 567 8900',
+            'gender' => 'male',
+        ];
+        $response = $this->json('POST','/api/user',$data);
+        $response->assertStatus(409); // conflict. account already exists
     }
 
 }
