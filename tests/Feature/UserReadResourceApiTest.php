@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 use App\User;
 
@@ -28,11 +29,12 @@ class UserReadResourceApiTest extends TestCase
      */
     public function testUserReadAllResourceApiAuthenticatedUnauthorized()
     {
+        $random = Str::random(40);
         $data = [
-            'api_token' => 'my_token',
+            'api_token' => $random,
             'role' => 'applicant'
         ];
-        $user = factory(User::class)->create(['api_token' => hash('sha256','my_token')]);
+        $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('GET','/api/user',$data);
         $response->assertStatus(403); // forbidden
     }
@@ -44,11 +46,12 @@ class UserReadResourceApiTest extends TestCase
      */
     public function testUserReadAllResourceApiAuthenticatedAuthorized()
     {
+        $random = Str::random(40);
         $data = [
-            'api_token' => 'admin_token',
+            'api_token' => $random,
             'role' => 'admin'
         ];
-        $user = factory(User::class)->create(['api_token' => hash('sha256','admin_token')]);
+        $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('GET','/api/user',$data);
         $response->assertStatus(200); // success
     }
@@ -71,11 +74,12 @@ class UserReadResourceApiTest extends TestCase
      */
     public function testUserReadOneResourceApiAuthenticated()
     {
+        $random = Str::random(40);
         $data = [
-            'api_token' => 'any_token'
+            'api_token' => $random
         ];
-        $user = factory(User::class)->create(['api_token' => hash('sha256','any_token')]);
-        $response = $this->actingAs($user)->json('GET','/api/user/1',$data);
+        $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
+        $response = $this->actingAs($user)->json('GET','/api/user/2',$data);
         $response->assertStatus(200); // success
     }
 }

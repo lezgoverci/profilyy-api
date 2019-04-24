@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show'
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
 Route::middleware('auth:api')->put('/user','UserResourceApiController@update');
 Route::post('/user','UserResourceApiController@store');
+Route::middleware('auth:api')->delete('/user','UserResourceApiController@destroy');

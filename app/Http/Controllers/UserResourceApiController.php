@@ -60,7 +60,7 @@ class UserResourceApiController extends Controller
      */
     public function show($id)
     {
-        if(User::find($id)->count() != 0){
+        if(User::find($id) != null){
             return (new UserResource(User::find($id)))->response("Success", 200);
         }else{
             return response("Not found", 404);
@@ -71,13 +71,12 @@ class UserResourceApiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         if($request->input('role') == 'admin'){
-            $user = new User;
+            $user = User::find($request->input('id'));
             $user->fname = $request->input('fname');
             $user->lname = $request->input('lname');
             $user->address = $request->input('address');
@@ -87,7 +86,7 @@ class UserResourceApiController extends Controller
             $user->api_token = hash('sha256',$request->input('email'));
 
             if($user->save()){
-                return (new UserResource($user))->response("Success", 201);
+                return (new UserResource($user))->response("Success", 200);
             }
         }
         else{
@@ -98,11 +97,19 @@ class UserResourceApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if($request->input('role') == 'admin'){
+            $user = User::find($request->input('id'));
+            
+            if($user->delete()){
+                return response("Deleted", 204);
+            }
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 }

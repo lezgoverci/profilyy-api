@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use App\User;
 
 class UserDeleteResourceApiTest extends TestCase
 {
@@ -15,7 +17,9 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiUnauthenticated()
     {
-        
+        $id = factory(User::class)->create()->id;
+        $response = $this->json('DELETE', '/api/user');
+        $response->assertStatus(401); // no token
     }
 
     /**
@@ -25,7 +29,15 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiAuthenticatedUnauthorized()
     {
-
+        $random = Str::random(40);
+        $data = [
+            'api_token' => $random,
+            'role' => 'applicant',
+            'id' => 1
+        ];
+        $user= factory(User::class)->create(['api_token' => hash('sha256',$random)]);
+        $response = $this->actingAs($user)->json('DELETE', '/api/user',$data);
+        $response->assertStatus(403); // forbidden
     }
 
     /**
@@ -35,6 +47,17 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiAuthenticatedAuthorized()
     {
+        $random = Str::random(40);
+        $data = [
+            'api_token' => $random,
+            'role' => 'admin',
+            'id' => 1
+        ];
+        $user= factory(User::class)->create(['api_token' => hash('sha256',$random)]);
+        $response = $this->actingAs($user)->json('DELETE', '/api/user',$data);
+        $response->assertStatus(204); // successfully deleted
 
+        $deleted_user= User::find($data['id']);
+        $this->assertEquals(null,$deleted_user);
     }
 }
