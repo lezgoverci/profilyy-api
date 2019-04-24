@@ -12,12 +12,16 @@ class UserResourceApiController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *@param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return "yes";
+        if($request->input('role') == 'admin' || $request->input('role') == 'hr'){
+            return UserResource::collection(User::all())->response("Success", 200);
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 
     /**
@@ -56,7 +60,11 @@ class UserResourceApiController extends Controller
      */
     public function show($id)
     {
-        //
+        if(User::find($id)->count() != 0){
+            return (new UserResource(User::find($id)))->response("Success", 200);
+        }else{
+            return response("Not found", 404);
+        }
     }
 
     /**

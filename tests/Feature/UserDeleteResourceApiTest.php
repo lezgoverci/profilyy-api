@@ -15,7 +15,7 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiUnauthenticated()
     {
-
+        
     }
 
     /**
