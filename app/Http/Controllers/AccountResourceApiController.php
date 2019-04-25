@@ -65,7 +65,7 @@ class AccountResourceApiController extends Controller
      */
     public function update(Request $request)
     {
-        
+
         $account = Account::find($request->input('id'));
         $account->password = Hash::make($request->input('password'));
         if($account->save()){
@@ -76,11 +76,19 @@ class AccountResourceApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if($request->input('role') == 'admin' || 'applicant'){
+            $account = Account::find($request->input('id'));
+            
+            if($account->delete()){
+                return response("Deleted", 204);
+            }
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 }

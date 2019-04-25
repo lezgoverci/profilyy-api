@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 Route::post('/account', 'AccountResourceApiController@store');
 Route::middleware('auth:api')->get('/account/{id}','AccountResourceApiController@show');
 Route::middleware('auth:api')->put('/account','AccountResourceApiController@update');
+Route::middleware('auth:api')->delete('/account','AccountResourceApiController@destroy');
 
 Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show');
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
