@@ -16,8 +16,11 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::post('/account', 'AccountResourceApiController@store');
+
 Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show');
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
 Route::middleware('auth:api')->put('/user','UserResourceApiController@update');
-Route::post('/user','UserResourceApiController@store');
+Route::middleware('auth:api')->post('/user','UserResourceApiController@store');
 Route::middleware('auth:api')->delete('/user','UserResourceApiController@destroy');
