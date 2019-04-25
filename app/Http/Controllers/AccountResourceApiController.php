@@ -50,7 +50,11 @@ class AccountResourceApiController extends Controller
      */
     public function show($id)
     {
-        //
+        if(Account::find($id) != null){
+            return (new AccountResource(Account::find($id)))->response("Success", 200);
+        }else{
+            return response("Not found", 404);
+        }
     }
 
     /**
