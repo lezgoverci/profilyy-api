@@ -61,12 +61,16 @@ class AccountResourceApiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        
+        $account = Account::find($request->input('id'));
+        $account->password = Hash::make($request->input('password'));
+        if($account->save()){
+            return (new AccountResource($account))->response("Success", 200);
+        }
     }
 
     /**
