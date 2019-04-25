@@ -15,9 +15,12 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('facebook_username')->nullable()->default(null);
+            $table->integer('role_id');
+            $table->integer('user_id');
             $table->string('username');
             $table->string('password');
-            $table->string('profile_photo');
+            $table->string('photo')->nullable()->default(null);
             $table->timestamps();
         });
     }
