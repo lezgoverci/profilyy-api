@@ -40,6 +40,6 @@ class User extends Authenticatable
     ];
 
     public function account(){
-        return $this->hasOne('\App\Account','id','account_id');
+        return $this->hasOne('\App\Account','user_id','id');
     }
 }
