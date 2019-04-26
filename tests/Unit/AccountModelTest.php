@@ -18,16 +18,4 @@ class AccountModelTest extends TestCase
         $account = factory(\App\Account::class)->make();
         $this->assertNotNull($account);
     }
-
-    /**
-     * Test Account has a User relationship
-     *
-     * @return void
-     */
-    public function testAccountModelUserRelationship()
-    {
-
-        $account = factory(\App\Account::class)->make();
-        $this->assertNotNull($account->user());
-    }
 }
