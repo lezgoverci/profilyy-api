@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::middleware('auth:api')->post('/applicant','ApplicantResourceApiController@store');
+Route::middleware('auth:api')->get('/applicant','ApplicantResourceApiController@show');
 
 Route::post('/account', 'AccountResourceApiController@store');
 Route::middleware('auth:api')->get('/account/{id}','AccountResourceApiController@show');

@@ -51,6 +51,8 @@ class UserCreateResourceApiTest extends TestCase
         $user = factory(User::class)->create(['api_token' => hash('sha256', $random )]);
         $response = $this->actingAs($user)->json('POST','/api/user',$data);
         $response->assertStatus(201); // Successfully created
+
+        $user->forceDelete();
     }
 
     /**
@@ -73,6 +75,8 @@ class UserCreateResourceApiTest extends TestCase
         $user = factory(User::class)->create(['api_token' => hash('sha256', $random )]);
         $response = $this->actingAs($user)->json('POST','/api/user',$data);
         $response->assertStatus(409); // conflict. account already exists
+
+        $user->forceDelete();
     }
 
 }

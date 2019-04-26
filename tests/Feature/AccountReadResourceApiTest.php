@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
 use App\User;
+use App\Account;
 
 class AccountReadResourceApiTest extends TestCase
 {
@@ -33,9 +34,14 @@ class AccountReadResourceApiTest extends TestCase
         $data = [
             'api_token' => $random
         ];
+        $account = factory(Account::class)->create();
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
-        $response = $this->actingAs($user)->json('GET','/api/account/1',$data);
+        $response = $this->actingAs($user)->json('GET','/api/account/'.$account->id,$data);
 
         $response->assertStatus(200); //success
+        $this->assertEquals($account->username,$response->getData()->data->username);
+
+        $account->forceDelete();
+        $user->forceDelete();
     }
 }

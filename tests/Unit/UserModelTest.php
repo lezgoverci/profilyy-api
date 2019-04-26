@@ -15,8 +15,10 @@ class UserModelTest extends TestCase
      */
     public function testUserModelExists()
     {
-        $user = factory(\App\User::class)->make();
+        $user = factory(\App\User::class)->create();
         $this->assertNotNull($user);
+
+        $user->forceDelete();
     }
 
     /**
@@ -27,7 +29,9 @@ class UserModelTest extends TestCase
     public function testUserModelHasAnAccountRelationship()
     {
 
-        $user = factory(\App\User::class)->make();
+        $user = factory(\App\User::class)->create();
         $this->assertNotNull($user->account());
+
+        $user->forceDelete();
     }
 }

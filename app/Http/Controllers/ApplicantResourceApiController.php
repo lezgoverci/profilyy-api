@@ -42,12 +42,16 @@ class ApplicantResourceApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        if($request->input('role') == 'applicant' || $request->input('role') ==  'admin'){
+            return new ApplicantResource(Applicant::find($request->input('id')));
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 
     /**

@@ -19,10 +19,13 @@ class ApplicantRelationshipTest extends TestCase
      */
     public function testApplicantModelAccountRelationship()
     {
-        $account = factory(Account::class)->create(['username' => 'my_username']);
-        $applicant = factory(Applicant::class)->create(['account_id' => $account->id]);
+        $account = factory(Account::class)->create();
+        $account_username = $account->username;
+        $applicant = factory(Applicant::class)->create();
+
+        $applicant->account()->save($account);
         $this->assertNotNull($applicant->account);
-        $this->assertEquals('my_username',$applicant->account->username);
+        $this->assertEquals($account_username,$applicant->account->username);
 
         $account->forceDelete();
         $applicant->forceDelete();
@@ -35,8 +38,10 @@ class ApplicantRelationshipTest extends TestCase
      */
     public function testApplicantModelRoleRelationship()
     {
-        $account = factory(Account::class)->create(['role_id' => '1']); // Admin role
-        $applicant = factory(Applicant::class)->create(['account_id' => $account->id]);
+        $account = factory(Account::class)->create(['role_id' => 1]); // Admin role
+        $applicant = factory(Applicant::class)->create();
+
+        $applicant->account()->save($account);
         $this->assertNotNull($applicant->account);
         $this->assertEquals('admin',$applicant->account->role->name);
         
@@ -52,11 +57,16 @@ class ApplicantRelationshipTest extends TestCase
      */
     public function testApplicantModelUserRelationship()
     {
-        $user = factory(User::class)->create(['fname' => 'my_fname']);
-        $account = factory(Account::class)->create(['user_id' => $user->id]);
-        $applicant = factory(Applicant::class)->create(['account_id' => $account->id]);
+        $user = factory(User::class)->create();
+        $user_fname = $user->fname;
+        $account = factory(Account::class)->create();
+        $applicant = factory(Applicant::class)->create();
+
+        $account->user()->associate($user);
+        $applicant->account()->save($account);
+
         $this->assertNotNull($applicant->account);
-        $this->assertEquals('my_fname',$applicant->account->user->fname);
+        $this->assertEquals($user_fname,$applicant->account->user->fname);
 
         $account->forceDelete();
         $applicant->forceDelete();

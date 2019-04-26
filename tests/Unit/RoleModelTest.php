@@ -18,8 +18,10 @@ class RoleModelTest extends TestCase
      */
     public function testRoleModelExists()
     {
-        $role = factory(Role::class)->make();
+        $role = factory(Role::class)->create();
         $this->assertNotNull($role);
+
+        $role->forceDelete();
     }
 
      /**
@@ -32,6 +34,9 @@ class RoleModelTest extends TestCase
         $account = factory(Account::class)->create(['role_id' => 1]);
         $role = factory(Role::class)->create(['name' => 'admin']);
         $this->assertEquals('admin', $account->role->name);
+
+        $role->forceDelete();
+        $account->forceDelete();
 
     }
 

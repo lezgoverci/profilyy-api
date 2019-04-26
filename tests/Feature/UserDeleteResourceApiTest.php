@@ -17,7 +17,6 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiUnauthenticated()
     {
-        $id = factory(User::class)->create()->id;
         $response = $this->json('DELETE', '/api/user');
         $response->assertStatus(401); // no token
     }
@@ -38,6 +37,8 @@ class UserDeleteResourceApiTest extends TestCase
         $user= factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('DELETE', '/api/user',$data);
         $response->assertStatus(403); // forbidden
+
+        $user->forceDelete();
     }
 
     /**
@@ -47,11 +48,12 @@ class UserDeleteResourceApiTest extends TestCase
      */
     public function testUserDeleteResourceApiAuthenticatedAuthorized()
     {
+        $test_user = factory(User::class)->create();
         $random = Str::random(40);
         $data = [
             'api_token' => $random,
             'role' => 'admin',
-            'id' => 1
+            'id' => $test_user->id
         ];
         $user= factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('DELETE', '/api/user',$data);
@@ -59,5 +61,8 @@ class UserDeleteResourceApiTest extends TestCase
 
         $deleted_user= User::find($data['id']);
         $this->assertEquals(null,$deleted_user);
+
+        $user->forceDelete();
+        $test_user->forceDelete();
     }
 }

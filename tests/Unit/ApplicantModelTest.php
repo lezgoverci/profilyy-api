@@ -17,7 +17,7 @@ class ApplicantModelTest extends TestCase
      */
     public function testApplicantModelExists()
     {
-        $applicant = factory(Applicant::class)->make();
+        $applicant = factory(Applicant::class)->create();
         $this->assertNotNull($applicant);
 
         $applicant->forceDelete();

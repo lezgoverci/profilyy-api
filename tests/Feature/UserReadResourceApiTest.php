@@ -37,6 +37,8 @@ class UserReadResourceApiTest extends TestCase
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('GET','/api/user',$data);
         $response->assertStatus(403); // forbidden
+
+        $user->forceDelete();
     }
 
     /**
@@ -54,6 +56,8 @@ class UserReadResourceApiTest extends TestCase
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('GET','/api/user',$data);
         $response->assertStatus(200); // success
+
+        $user->forceDelete();
     }
 
     /**
@@ -74,12 +78,18 @@ class UserReadResourceApiTest extends TestCase
      */
     public function testUserReadOneResourceApiAuthenticated()
     {
+        $test_user = factory(User::class)->create();
         $random = Str::random(40);
         $data = [
             'api_token' => $random
         ];
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
-        $response = $this->actingAs($user)->json('GET','/api/user/2',$data);
+        $response = $this->actingAs($user)->json('GET','/api/user/'.$test_user->id,$data);
         $response->assertStatus(200); // success
+
+        $this->assertEquals($test_user->fname,$response->getData()->data->fname);
+
+        $user->forceDelete();
+        $test_user->forceDelete();
     }
 }

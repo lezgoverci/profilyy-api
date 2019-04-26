@@ -15,7 +15,9 @@ class AccountModelTest extends TestCase
      */
     public function testAccountModelExists()
     {
-        $account = factory(\App\Account::class)->make();
+        $account = factory(\App\Account::class)->create();
         $this->assertNotNull($account);
+
+        $account->forceDelete();
     }
 }

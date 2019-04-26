@@ -34,6 +34,8 @@ class UserUpdateResourceApiTest extends TestCase
         $response = $this->actingAs($user)
                         ->json('PUT','/api/user',$data);
         $response->assertStatus(401); // unauthorized
+
+        $user->forceDelete();
         
 
     }
@@ -61,6 +63,8 @@ class UserUpdateResourceApiTest extends TestCase
         $response = $this->actingAs($user)
                         ->json('PUT','/api/user',$data);
         $response->assertStatus(403); //forbidden
+
+        $user->forceDelete();
     }
 
     /**
@@ -70,9 +74,10 @@ class UserUpdateResourceApiTest extends TestCase
      */
     public function testUserUpdateResourceApiAuthenticatedAuthorized()
     {
+        $test_user = factory(User::class)->create();
         $random = Str::random(40);
         $data = [
-            'id' => 2,
+            'id' => $test_user->id,
             'fname' => 'Jane',
             'lname' => 'Doe',
             'address' => 'Butuan City, Philippines',
@@ -87,6 +92,9 @@ class UserUpdateResourceApiTest extends TestCase
                         ->json('PUT','/api/user',$data);
         $response->assertStatus(200); // created successfully
         $this->assertEquals('Jane', User::find($data['id'])->fname);
+
+        $user->forceDelete();
+        $test_user->forceDelete();
     }
     
 }

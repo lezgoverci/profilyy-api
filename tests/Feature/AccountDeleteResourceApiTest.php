@@ -18,15 +18,18 @@ class AccountDeleteResourceApiTest extends TestCase
      */
     public function testAccountDeleteResourceApiUnauthenticated()
     {
-        $id = factory(Account::class)->create()->id;
+        $account = factory(Account::class)->create();
         $data = [
             'api_token' => null,
             'role' => 'applicant',
-            'id' => $id
+            'id' => $account->id
         ];
         $user = factory(User::class)->create(['api_token' => hash('sha256',Str::random(60))]);
         $response = $this->actingAs($user)->json('DELETE', '/api/account',$data);
         $response->assertStatus(401); // no token
+
+        $user->forceDelete();
+        $account->forceDelete();
     }
 
      /**
@@ -36,15 +39,18 @@ class AccountDeleteResourceApiTest extends TestCase
      */
     public function testAccountDeleteResourceApiAuthenticatedUnauthorized()
     {
-        $id = factory(Account::class)->create()->id;
+        $account = factory(Account::class)->create();
         $data = [
             'api_token' => Str::random(60),
             'role' => 'hr',
-            'id' => $id
+            'id' => $account->id
         ];
         $user = factory(User::class)->create(['api_token' => hash('sha256',Str::random(60))]);
         $response = $this->actingAs($user)->json('DELETE', '/api/account',$data);
         $response->assertStatus(401); // wrong token
+
+        $user->forceDelete();
+        $account->forceDelete();
     }
 
      /**
@@ -55,11 +61,11 @@ class AccountDeleteResourceApiTest extends TestCase
     public function testAccountDeleteResourceApiAuthenticatedAuthorized()
     {
         $random = Str::random(60);
-        $id = factory(Account::class)->create()->id;
+        $account = factory(Account::class)->create();
         $data = [
             'api_token' => $random,
             'role' => 'admin',
-            'id' => $id
+            'id' => $account->id
         ];
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('DELETE', '/api/account',$data);
@@ -67,5 +73,8 @@ class AccountDeleteResourceApiTest extends TestCase
 
         $deleted_account = Account::find($data['id']);
         $this->assertEquals(null,$deleted_account);
+
+        $user->forceDelete();
+        $account->forceDelete();
     }
 }

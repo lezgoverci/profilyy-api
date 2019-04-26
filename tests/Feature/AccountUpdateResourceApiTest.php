@@ -6,8 +6,10 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 use App\User;
+use App\Account;
 
 class AccountUpdateResourceApiTest extends TestCase
 {
@@ -44,6 +46,8 @@ class AccountUpdateResourceApiTest extends TestCase
         $user = factory(User::class)->create(['api_token' => hash('sha256',Str::random(40))]);
         $response = $this->actingAs($user)->json('PUT','/api/account',$data);
         $response->assertStatus(401); // unauthorized
+
+        $user->forceDelete();
         
 
     }
@@ -55,15 +59,21 @@ class AccountUpdateResourceApiTest extends TestCase
      */
     public function testAccountUpdateResourceApiAuthorized()
     {
+        $account = factory(Account::class)->create();
         $random = Str::random(40);
         $data = [
             'password' => 'new_password',
-            'id' => 1,
+            'id' => $account->id,
             'api_token' => $random
         ];
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
         $response = $this->actingAs($user)->json('PUT','/api/account',$data);
+        $account->refresh();
         $response->assertStatus(200); // success
+        $this->assertTrue(Hash::check('new_password',$account->password));
+
+        $user->forceDelete();
+        $account->forceDelete();
         
 
     }
