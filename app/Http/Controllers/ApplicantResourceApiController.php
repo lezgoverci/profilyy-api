@@ -58,12 +58,19 @@ class ApplicantResourceApiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        if($request->input('role') == 'applicant'){
+            $applicant =  Applicant::find($request->input('id'));
+            $applicant->resume_id = $request->input('resume_id');
+            if($applicant->save()){
+                return new ApplicantResource($applicant);
+            }
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 
     /**
