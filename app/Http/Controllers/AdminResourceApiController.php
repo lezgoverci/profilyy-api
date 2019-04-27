@@ -72,11 +72,18 @@ class AdminResourceApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if(Role::find($request->input('role_id'))->name == 'admin'){
+            $admin = Admin::find($request->input('admin_id'));
+            if($admin->delete()){
+                return response("Deleted", 204);
+            }
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 }

@@ -19,6 +19,7 @@ class CreateApplicantsTable extends Migration
             $table->integer('role_id');
             $table->bigInteger('resume_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

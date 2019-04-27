@@ -82,7 +82,7 @@ class ApplicantDeleteResourceApiTest extends TestCase
        $response = $this->actingAs($user)->json('DELETE','/api/applicant',$data);
        $response->assertStatus(204); 
 
-       $deleted_applicant = Applicant::find($data['id']);
+       $deleted_applicant = Applicant::find($data['applicant_id']);
         $this->assertEquals(null,$deleted_applicant);
 
         $role->forceDelete();

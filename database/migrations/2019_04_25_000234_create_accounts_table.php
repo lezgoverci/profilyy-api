@@ -21,6 +21,7 @@ class CreateAccountsTable extends Migration
             $table->string('password');
             $table->string('photo')->nullable()->default(null);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

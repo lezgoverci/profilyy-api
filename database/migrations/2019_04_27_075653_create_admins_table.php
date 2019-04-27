@@ -18,6 +18,7 @@ class CreateAdminsTable extends Migration
             $table->integer('account_id');
             $table->integer('role_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
