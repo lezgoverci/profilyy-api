@@ -45,12 +45,16 @@ class AdminResourceApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        if(Role::find($request->input('role_id'))->name == 'admin'){
+            return new AdminResource(Admin::find($request->input('admin_id')));
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 
     /**
