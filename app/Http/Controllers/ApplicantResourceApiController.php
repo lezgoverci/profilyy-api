@@ -76,11 +76,18 @@ class ApplicantResourceApiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        if($request->input('role') == 'applicant'){
+            $applicant =  Applicant::find($request->input('id'));
+            
+            if($applicant->delete()){
+                return response("Deleted", 204);
+            }
+        }else{
+            return response("Forbidden", 403);
+        }
     }
 }
