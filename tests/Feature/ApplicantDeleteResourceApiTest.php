@@ -72,21 +72,21 @@ class ApplicantDeleteResourceApiTest extends TestCase
         $applicant = factory(Applicant::class)->create();
         $role = factory(Role::class)->create(['name' => 'applicant']);
         $random = Str::random(60);
-       $data = [
-           'api_token' => $random,
-           'role_id' => $role->id,
-           'applicant_id' => $applicant->id
-       ];
+        $data = [
+            'api_token' => $random,
+            'role_id' => $role->id,
+            'applicant_id' => $applicant->id
+        ];
 
-       $user = factory(User::class)->create(['api_token'=> hash('sha256',$random)]);
-       $response = $this->actingAs($user)->json('DELETE','/api/applicant',$data);
-       $response->assertStatus(204); 
+        $user = factory(User::class)->create(['api_token'=> hash('sha256',$random)]);
+        $response = $this->actingAs($user)->json('DELETE','/api/applicant',$data);
+        $response->assertStatus(204); 
 
-       $deleted_applicant = Applicant::find($data['applicant_id']);
+        $deleted_applicant = Applicant::find($data['applicant_id']);
         $this->assertEquals(null,$deleted_applicant);
 
         $role->forceDelete();
-       $user->forceDelete();
-       $applicant->forceDelete();
+        $user->forceDelete();
+        $applicant->forceDelete();
     }
 }
