@@ -11,18 +11,6 @@ use App\User;
 
 class AccountRelationshipsTest extends TestCase
 {
-    /**
-     * Test Account role relationship
-     *
-     * @return void
-     */
-    public function testAccountRelationshipRole()
-    {
-        $account = factory(Account::class)->create(['role_id' => 1]);
-        $this->assertEquals('admin',$account->role->name);
-
-        $account->forceDelete();
-    }
 
     /**
      * Test Account user relationship

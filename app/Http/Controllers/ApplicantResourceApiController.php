@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\ApplicantResource;
 use App\Applicant;
+use App\Role;
 
 class ApplicantResourceApiController extends Controller
 {
@@ -26,9 +27,10 @@ class ApplicantResourceApiController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->input('role') == 'applicant'){
+        if(Role::find($request->input('role_id'))->name == 'applicant'){
             $applicant = new Applicant;
             $applicant->account_id = $request->input('account_id');
+            $applicant->role_id = $request->input('role_id');
             if($applicant->save()){
                 return (new ApplicantResource($applicant))->response("success", 201);
             }
@@ -47,7 +49,7 @@ class ApplicantResourceApiController extends Controller
      */
     public function show(Request $request)
     {
-        if($request->input('role') == 'applicant' || $request->input('role') ==  'admin'){
+        if(Role::find($request->input('role_id'))->name == 'applicant' || Role::find($request->input('role_id'))->name  ==  'admin'){
             return new ApplicantResource(Applicant::find($request->input('id')));
         }else{
             return response("Forbidden", 403);
@@ -62,7 +64,7 @@ class ApplicantResourceApiController extends Controller
      */
     public function update(Request $request)
     {
-        if($request->input('role') == 'applicant'){
+        if(Role::find($request->input('role_id'))->name == 'applicant'){
             $applicant =  Applicant::find($request->input('id'));
             $applicant->resume_id = $request->input('resume_id');
             if($applicant->save()){
@@ -80,7 +82,7 @@ class ApplicantResourceApiController extends Controller
      */
     public function destroy(Request $request)
     {
-        if($request->input('role') == 'applicant'){
+        if(Role::find($request->input('role_id'))->name == 'applicant'){
             $applicant =  Applicant::find($request->input('id'));
             
             if($applicant->delete()){

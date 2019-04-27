@@ -29,6 +29,7 @@ class ApplicantMigrationTest extends TestCase
     {
         $this->assertTrue(Schema::hasColumn('applicants','id'));
         $this->assertTrue(Schema::hasColumn('applicants','account_id'));
+        $this->assertTrue(Schema::hasColumn('applicants','role_id'));
         $this->assertTrue(Schema::hasColumn('applicants','resume_id'));
     }
 }

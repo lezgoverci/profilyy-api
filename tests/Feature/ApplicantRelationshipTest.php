@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Account;
 use App\Applicant;
 use App\User;
+use App\Role;
 
 class ApplicantRelationshipTest extends TestCase
 {
@@ -38,15 +39,16 @@ class ApplicantRelationshipTest extends TestCase
      */
     public function testApplicantModelRoleRelationship()
     {
-        $account = factory(Account::class)->create(['role_id' => 1]); // Admin role
+    
+        $role = factory(Role::class)->create(['name' => 'admin']);
         $applicant = factory(Applicant::class)->create();
 
-        $applicant->account()->save($account);
-        $this->assertNotNull($applicant->account);
-        $this->assertEquals('admin',$applicant->account->role->name);
+        $applicant->role()->save($role);
+        $this->assertNotNull($applicant->role);
+        $this->assertEquals('admin',$applicant->role->name);
         
 
-        $account->forceDelete();
+        $role->forceDelete();
         $applicant->forceDelete();
     }
 

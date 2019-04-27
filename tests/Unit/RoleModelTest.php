@@ -24,20 +24,5 @@ class RoleModelTest extends TestCase
         $role->forceDelete();
     }
 
-     /**
-     * Test Role relationship from Account
-     *
-     * @return void
-     */
-    public function testRoleRelationshipAccount()
-    {
-        $account = factory(Account::class)->create(['role_id' => 1]);
-        $role = factory(Role::class)->create(['name' => 'admin']);
-        $this->assertEquals('admin', $account->role->name);
-
-        $role->forceDelete();
-        $account->forceDelete();
-
-    }
 
 }

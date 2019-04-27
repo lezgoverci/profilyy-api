@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 use App\Account;
 use App\User;
+use App\Role;
 
 class ApplicantCreateApiResourceTest extends TestCase
 {
@@ -41,15 +42,17 @@ class ApplicantCreateApiResourceTest extends TestCase
         $random = Str::random(60);
         $account = factory(Account::class)->create();
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
+        $role = factory(Role::class)->create(['name'=>'hr']);
         $data = [
             'api_token' => $random,
             'account_id' => $account->id,
-            'role' => 'hr'
+            'role_id' => $role->id
         ];
 
         $response = $this->json('POST','/api/applicant',$data);
         $response->assertStatus(403); // unauthorized
 
+        $role->forceDelete();
         $account->forceDelete();
         $user->forceDelete();
     }
@@ -64,15 +67,17 @@ class ApplicantCreateApiResourceTest extends TestCase
         $random = Str::random(60);
         $account = factory(Account::class)->create();
         $user = factory(User::class)->create(['api_token' => hash('sha256',$random)]);
+        $role = factory(Role::class)->create(['name'=>'applicant']);
         $data = [
             'api_token' => $random,
             'account_id' => $account->id,
-            'role' => 'applicant'
+            'role_id' => $role->id
         ];
 
         $response = $this->json('POST','/api/applicant',$data);
         $response->assertStatus(201); // successfully created
 
+        $role->forceDelete();
         $account->forceDelete();
         $user->forceDelete();
     }

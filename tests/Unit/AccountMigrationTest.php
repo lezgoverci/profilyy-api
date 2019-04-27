@@ -29,7 +29,6 @@ class AccountMigrationTest extends TestCase
     {
         $this->assertTrue(Schema::hasColumn('accounts','id'));
         $this->assertTrue(Schema::hasColumn('accounts','facebook_username'));
-        $this->assertTrue(Schema::hasColumn('accounts','role_id'));
         $this->assertTrue(Schema::hasColumn('accounts','user_id'));
         $this->assertTrue(Schema::hasColumn('accounts','username'));
         $this->assertTrue(Schema::hasColumn('accounts','password'));
