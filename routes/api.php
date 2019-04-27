@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+Route::middleware('auth:api')->post('/admin','AdminResourceApiController@store');
+
 Route::middleware('auth:api')->post('/applicant','ApplicantResourceApiController@store');
 Route::middleware('auth:api')->get('/applicant','ApplicantResourceApiController@show');
 Route::middleware('auth:api')->put('/applicant','ApplicantResourceApiController@update');
