@@ -83,7 +83,7 @@ class ApplicantResourceApiController extends Controller
     public function destroy(Request $request)
     {
         if(Role::find($request->input('role_id'))->name == 'applicant'){
-            $applicant =  Applicant::find($request->input('id'));
+            $applicant =  Applicant::find($request->input('applicant_id'));
             
             if($applicant->delete()){
                 return response("Deleted", 204);

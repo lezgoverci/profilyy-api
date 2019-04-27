@@ -75,7 +75,7 @@ class ApplicantDeleteResourceApiTest extends TestCase
        $data = [
            'api_token' => $random,
            'role_id' => $role->id,
-           'id' => $applicant->id
+           'applicant_id' => $applicant->id
        ];
 
        $user = factory(User::class)->create(['api_token'=> hash('sha256',$random)]);
