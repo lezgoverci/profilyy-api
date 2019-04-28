@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Account;
 
 class AccountModelTest extends TestCase
 {
@@ -15,7 +16,7 @@ class AccountModelTest extends TestCase
      */
     public function testAccountModelExists()
     {
-        $account = factory(\App\Account::class)->create();
+        $account = factory(Account::class)->create();
         $this->assertNotNull($account);
 
         $account->forceDelete();
