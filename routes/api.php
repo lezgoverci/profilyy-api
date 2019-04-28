@@ -17,6 +17,11 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+Route::middleware('auth:api')->post('/resume','ResumeResourceApiController@store');
+Route::middleware('auth:api')->get('/resume','ResumeResourceApiController@show');
+Route::middleware('auth:api')->put('/resume','ResumeResourceApiController@update');
+Route::middleware('auth:api')->delete('/resume','ResumeResourceApiController@destroy');
+
 Route::middleware('auth:api')->post('/admin','AdminResourceApiController@store');
 Route::middleware('auth:api')->get('/admin','AdminResourceApiController@show');
 Route::middleware('auth:api')->delete('/admin','AdminResourceApiController@destroy');

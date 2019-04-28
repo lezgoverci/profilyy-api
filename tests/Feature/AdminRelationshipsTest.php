@@ -40,7 +40,8 @@ class AdminRelationshipsTest extends TestCase
         $admin = factory(Admin::class)->create();
         $role = factory(Role::class)->create();
 
-        $admin->role()->save($role);
+        $admin->role_id = $role->id;
+
 
         $this->assertEquals($role->name, $admin->role->name);
 
