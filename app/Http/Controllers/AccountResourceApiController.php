@@ -37,7 +37,7 @@ class AccountResourceApiController extends Controller
                 return (new AccountResource($account))->response("success", 201);
             }
         }else{
-            return response("Account already exists", 409);
+            return response()->json(["message" => "Account already exists"]);
         }
         
     }
