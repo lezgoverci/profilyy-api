@@ -37,7 +37,12 @@ class Register extends Component{
                 })
                 .then(response => {
                     if(response.status == 201){
-                        this.props.history.push("/login");
+                        this.props.history.push({
+                            pathname: "/login",
+                            state: {
+                                account_id : response.data.id     
+                            }    
+                        });
                     }else if(response.message === "Account already exists"){
                         
                         this.setState({accountExists: true});

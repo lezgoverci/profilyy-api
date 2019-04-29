@@ -17,6 +17,11 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+Route::post('/login','AuthController@login');
+Route::post('/logout','AuthController@logout');
+Route::get('/authid','AuthController@id');
+
+
 Route::middleware('auth:api')->post('/resume','ResumeResourceApiController@store');
 Route::middleware('auth:api')->get('/resume','ResumeResourceApiController@show');
 Route::middleware('auth:api')->put('/resume','ResumeResourceApiController@update');
@@ -31,13 +36,14 @@ Route::middleware('auth:api')->get('/applicant','ApplicantResourceApiController@
 Route::middleware('auth:api')->put('/applicant','ApplicantResourceApiController@update');
 Route::middleware('auth:api')->delete('/applicant','ApplicantResourceApiController@destroy');
 
+Route::get('/account', 'AccountResourceApiController@index');
 Route::post('/account', 'AccountResourceApiController@store');
-Route::middleware('auth:api')->get('/account/{id}','AccountResourceApiController@show');
+Route::get('/account/{id}','AccountResourceApiController@show');
 Route::middleware('auth:api')->put('/account','AccountResourceApiController@update');
 Route::middleware('auth:api')->delete('/account','AccountResourceApiController@destroy');
 
 Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show');
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
 Route::middleware('auth:api')->put('/user','UserResourceApiController@update');
-Route::middleware('auth:api')->post('/user','UserResourceApiController@store');
+Route::post('/user','UserResourceApiController@store');
 Route::middleware('auth:api')->delete('/user','UserResourceApiController@destroy');

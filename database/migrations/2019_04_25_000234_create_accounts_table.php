@@ -20,6 +20,7 @@ class CreateAccountsTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('photo')->nullable()->default(null);
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

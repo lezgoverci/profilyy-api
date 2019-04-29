@@ -41,6 +41,7 @@ class UserResourceApiController extends Controller
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->gender = $request->input('gender');
+            $user->account_id = $request->input('account_id');
             $user->api_token = hash('sha256',$request->input('email'));
 
             if($user->save()){

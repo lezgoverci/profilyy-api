@@ -16,7 +16,7 @@ class AccountResourceApiController extends Controller
      */
     public function index()
     {
-        //
+        return new AccountResource(Account::with('user')->get());
     }
 
     /**

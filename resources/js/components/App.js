@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import Register from "./public/Register";
+import Login from "./public/Login";
+import Users from "./public/Users";
+
+import Profile from "./applicant/Profile";
 
 
 function Public({match}){
@@ -11,7 +15,8 @@ function Public({match}){
     <div className="container">
       <Switch>
         <Route path={`${match.path}register`} component={Register}/>
-        {/* <Route path={`${match.path}login`} component={Login}/> */}
+       	<Route path={`${match.path}login`} component={Login}/>
+       	<Route path={`${match.path}`} component={Users}/>
         <Route path="*" component={() => "Page not found"} />
       </Switch>
     </div>
@@ -26,7 +31,12 @@ function Admin({match}){
 
 function Applicant({match}){
   return(
-    <div>Applicant</div>
+    <div className="container">
+      <Switch>
+       	<Route path={`${match.path}`} component={Profile}/>
+        <Route path="*" component={() => "Page not found"} />
+      </Switch>
+    </div>
   )
 }
 
