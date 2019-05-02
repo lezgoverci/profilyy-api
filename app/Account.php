@@ -10,7 +10,9 @@ use App\Role;
 class Account extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['username','password','photo','facebook_username'];
+    protected $fillable = [
+        'fname','lname','address','phone', 'gender',
+    ];
 
     public function user(){
         return $this->belongsTo('App\User');

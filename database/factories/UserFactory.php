@@ -18,16 +18,15 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $password = $faker->password;
     return [
         'account_id' => function(){
             return factory(\App\Account::class)->make()->id;
         },
-        'fname' => $faker->firstName,
-        'lname' => $faker->lastName,
-        'address' => $faker->address,
         'email' => $faker->unique()->safeEmail,
-        'phone' => $faker->tollFreePhoneNumber,
-        'gender' => $faker->randomElement($array = array('male','female'))
+        'password' => $password,
+        'api_token' => hash('sha256', $password)
+        
 
     ];
 });

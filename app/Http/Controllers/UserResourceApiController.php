@@ -32,15 +32,11 @@ class UserResourceApiController extends Controller
      */
     public function store(Request $request)
     {
-        $count = User::where('email', $request['email'])->count();
+        $count = User::where('email', $request->input('email'))->count();
         if($count == 0){
             $user = new User;
-            $user->fname = $request->input('fname');
-            $user->lname = $request->input('lname');
-            $user->address = $request->input('address');
             $user->email = $request->input('email');
-            $user->phone = $request->input('phone');
-            $user->gender = $request->input('gender');
+            $user->password = Hash::make($request->input('password'));
             $user->api_token = hash('sha256',$request->input('email'));
 
             if($user->save()){

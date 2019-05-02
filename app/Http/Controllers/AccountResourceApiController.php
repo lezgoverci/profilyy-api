@@ -30,8 +30,11 @@ class AccountResourceApiController extends Controller
         $count = Account::where('username', $request->input('username'))->count();
         if($count == 0){
             $account = new Account;
-            $account->username = $request->input('username');
-            $account->password = Hash::make($request->input('password'));
+            $account->fname = $request->input('fname');
+            $account->lname = $request->input('lname');
+            $account->address = $request->input('address');
+            $account->phone = $request->input('phone');
+            $account->gender = $request->input('gender');
 
             if($account->save()){
                 return (new AccountResource($account))->response("success", 201);
