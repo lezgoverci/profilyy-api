@@ -63,5 +63,34 @@ class AuthController extends Controller
          
       }
 
+      /**
+     * Authenticate
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function authenticate(Request $request){
+
+        $api_token = Str::random(60);
+
+        $user = User::where('email', $request->input('email'))->where('password', $request->input('password'))->first();
+        if($user){
+            $user->api_token = $api_token;
+            $user->save();
+
+            return (new UserResource($user))->additional([
+                'access_token' => $api_token,
+                'message' => 'Token updated'
+            ]);
+        }else{
+            return response(['message' => 'Invalid username or password'], 403);
+        }
+        
+
+        
+ 
+         
+      }
+
 
 }
