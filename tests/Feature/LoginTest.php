@@ -160,8 +160,39 @@ class LoginTest extends TestCase
         ];
 
         $response = $this->json('POST','/api/login',$data);
-        $response->assertStatus(404);
+        $response->assertStatus(403);
         $response->assertSeeText("Email not found");
+
+
+        User::where('email', $input['email'])->first()->forceDelete();
+
+    }
+
+    /**
+     * Test login password invalid
+     *
+     * @return void
+     */
+    public function testLoginPasswordInvalid()
+    {
+
+        $input = [
+            'email' => "myemail7@email.com",
+            'password' => "mypassword7"
+        ];
+        $user = $this->json('POST','/api/register',$input);
+
+        $user_data = $user->getData();
+
+        $data = [
+            'email' => $input['email'],
+            'password' =>  "wrongpassword",
+            'api_token' => $user_data->access_token
+        ];
+
+        $response = $this->json('POST','/api/login',$data);
+        $response->assertStatus(403);
+        $response->assertSeeText("Invalid password");
 
 
         User::where('email', $input['email'])->first()->forceDelete();

@@ -21,14 +21,19 @@ class AuthController extends Controller
 
         $count = User::where('email', $request->input('email') )->count();
         if($count == 1){
-            if((User::where('email',$request->input('email'))->first()->api_token == $request->input('api_token'))){
-                return User::where('email', $request->input('email') )->first();
+            if(User::where('email', $request->input('email') )->first()->password == $request->input('password')){
+                if((User::where('email',$request->input('email'))->first()->api_token == $request->input('api_token'))){
+                    return User::where('email', $request->input('email') )->first();
+                }else{
+                    return response(['message' => 'Unauthorized'], 403);
+                }
             }else{
-                return response(['message' => 'Unauthorized'], 403);
+                return response(['message' => 'Invalid password'], 403);
             }
             
+            
         }else{
-            return response(['message' => 'Email not found'], 404);
+            return response(['message' => 'Email not found'], 403);
         }
      
             
