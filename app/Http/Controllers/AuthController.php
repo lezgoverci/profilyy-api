@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -17,67 +19,44 @@ class AuthController extends Controller
     public function login(Request $request){
         $credentials = $request->only("email", "password");
 
-        $user = User::where('email', $request->input('email') )->first();
-        if(Hash::check($user->email, $request->input('email') )){
-            return $user;
+        $count = User::where('email', $request->input('email') )->count();
+        if($count == 1){
+            if((User::where('email',$request->input('email'))->first()->api_token == $request->input('api_token'))){
+                return User::where('email', $request->input('email') )->first();
+            }else{
+                return response(['message' => 'Unauthorized'], 403);
+            }
+            
         }else{
-            return response("Error");
+            return response(['message' => 'Authentication failed']);
         }
+     
+            
+        
 
         
      }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
+     /**
+     * Register
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function register(Request $request){
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $api_token = Str::random(60);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $user = new User;
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->api_token = $api_token;
+        $user->save();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+        return (new UserResource($user))->additional(['access_token' => $api_token]);
+ 
+         
+      }
+
+
 }
