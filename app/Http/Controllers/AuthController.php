@@ -28,7 +28,7 @@ class AuthController extends Controller
             }
             
         }else{
-            return response(['message' => 'Authentication failed']);
+            return response(['message' => 'Email not found'], 404);
         }
      
             

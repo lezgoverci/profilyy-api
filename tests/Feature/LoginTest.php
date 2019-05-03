@@ -137,6 +137,37 @@ class LoginTest extends TestCase
 
     }
 
+    /**
+     * Test login email not found
+     *
+     * @return void
+     */
+    public function testLoginEmailNotFound()
+    {
+
+        $input = [
+            'email' => "myemail6@email.com",
+            'password' => "mypassword6"
+        ];
+        $user = $this->json('POST','/api/register',$input);
+
+        $user_data = $user->getData();
+
+        $data = [
+            'email' => "wrongemail@email.com",
+            'password' =>  $input['password'],
+            'api_token' => $user_data->access_token
+        ];
+
+        $response = $this->json('POST','/api/login',$data);
+        $response->assertStatus(404);
+        $response->assertSeeText("Email not found");
+
+
+        User::where('email', $input['email'])->first()->forceDelete();
+
+    }
+
     
 
 }
