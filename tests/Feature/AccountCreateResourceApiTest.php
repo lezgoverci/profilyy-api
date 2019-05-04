@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
+use App\User;
 use Illuminate\Support\Str;
 
 class AccountCreateResourceApiTest extends TestCase
@@ -17,12 +17,22 @@ class AccountCreateResourceApiTest extends TestCase
      */
     public function testAccountCreateResourceApi()
     {
+
+        $user = factory(User::class)->create();
+
         $data = [
-            'username' => 'my_username',
-            'password' => 'my_password',
+            'fname' => 'my_fname',
+            'lname' => 'my_lname',
+            'address' => 'my_address',
+            'phone' => 'my_phone',
+            'gender' => 'male',
+            'api_token' => $user->api_token
         ];
         $response = $this->json('POST','/api/account',$data);
+     
         $response->assertStatus(201); // created successfully
+
+        $user->forceDelete();
     }
 
     /**
@@ -30,13 +40,22 @@ class AccountCreateResourceApiTest extends TestCase
      *
      * @return void
      */
-    public function testAccountCreateResourceApiDuplicateUsername()
+    public function testAccountCreateResourceApiDuplicate()
     {
+        $user = factory(User::class)->create(['account_id' => 1]);
+
         $data = [
-            'username' => 'my_username',
-            'password' => 'my_password',
+            'fname' => 'my_fname',
+            'lname' => 'my_lname',
+            'address' => 'my_address',
+            'phone' => 'my_phone',
+            'gender' => 'male',
+            'api_token' => $user->api_token
         ];
         $response = $this->json('POST','/api/account',$data);
         $response->assertStatus(409); // conflict. account already exists
+    
+        $user->forceDelete();
     }
+
 }

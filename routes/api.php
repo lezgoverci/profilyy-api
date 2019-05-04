@@ -35,11 +35,12 @@ Route::middleware('auth:api')->get('/applicant','ApplicantResourceApiController@
 Route::middleware('auth:api')->put('/applicant','ApplicantResourceApiController@update');
 Route::middleware('auth:api')->delete('/applicant','ApplicantResourceApiController@destroy');
 
-Route::post('/account', 'AccountResourceApiController@store');
+Route::middleware('auth:api')->post('/account', 'AccountResourceApiController@store');
 Route::middleware('auth:api')->get('/account/{id}','AccountResourceApiController@show');
 Route::middleware('auth:api')->put('/account','AccountResourceApiController@update');
 Route::middleware('auth:api')->delete('/account','AccountResourceApiController@destroy');
 
+Route::middleware('auth:api')->get('/user/{id}/account','UserResourceApiController@account');
 Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show');
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
 Route::middleware('auth:api')->put('/user','UserResourceApiController@update');

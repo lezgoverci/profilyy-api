@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Account;
+use App\User;
 use App\Http\Resources\AccountResource;
 
 class AccountResourceApiController extends Controller
@@ -27,21 +28,25 @@ class AccountResourceApiController extends Controller
      */
     public function store(Request $request)
     {
-        $count = Account::where('username', $request->input('username'))->count();
-        if($count == 0){
-            $account = new Account;
-            $account->fname = $request->input('fname');
-            $account->lname = $request->input('lname');
-            $account->address = $request->input('address');
-            $account->phone = $request->input('phone');
-            $account->gender = $request->input('gender');
+        
+            $user = User::where('api_token', $request->input('api_token'))->first();
+            if($user->account_id == null){
+                $account = new Account;
+                $account->fname = $request->input('fname');
+                $account->lname = $request->input('lname');
+                $account->address = $request->input('address');
+                $account->phone = $request->input('phone');
+                $account->gender = $request->input('gender');
+                $account->user_id = $user->id;
 
-            if($account->save()){
-                return (new AccountResource($account))->response("success", 201);
+                if($account->save()){
+                    return (new AccountResource($account))->response("success", 201);
+                }
+            }else{
+                return response(['message' => 'User already has an account'], 409);
             }
-        }else{
-            return response("Account already exists", 409);
-        }
+            
+
         
     }
 
