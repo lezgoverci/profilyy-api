@@ -3,6 +3,7 @@
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
 use App\User;
+use App\Account;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -20,7 +21,7 @@ use Faker\Generator as Faker;
 $factory->define(User::class, function (Faker $faker) {
     $token = Str::random(60);
     return [
-        'account_id' => null,
+        'account_id' => factory(Account::class)->create()->id,
         'email' => $faker->unique()->safeEmail,
         'password' => $faker->password,
         'api_token' =>  $token

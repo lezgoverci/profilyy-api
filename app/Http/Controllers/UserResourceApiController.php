@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 use App\User;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\AccountResource;
 
 class UserResourceApiController extends Controller
 {
@@ -108,4 +109,25 @@ class UserResourceApiController extends Controller
             return response("Forbidden", 403);
         }
     }
+
+    /**
+     * get the user account
+     * @param  \Illuminate\Http\Request
+      * @return \Illuminate\Http\Response
+     */
+    public function account(Request $request)
+    {
+        if(User::find($request->input('user_id')) != null){
+            $user = User::find($request->input('user_id'));
+            if($user != null){
+                return (new AccountResource($user->account))->response("Success", 200);
+            }else{
+                return response(['message' => 'User not found'], 404);
+            }
+            
+        }else{
+            return response("Not found", 404);
+        }
+    }
+
 }

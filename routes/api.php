@@ -40,7 +40,7 @@ Route::middleware('auth:api')->get('/account/{id}','AccountResourceApiController
 Route::middleware('auth:api')->put('/account','AccountResourceApiController@update');
 Route::middleware('auth:api')->delete('/account','AccountResourceApiController@destroy');
 
-Route::middleware('auth:api')->get('/user/{id}/account','UserResourceApiController@account');
+Route::middleware('auth:api')->post('/user/account','UserResourceApiController@account');
 Route::middleware('auth:api')->get('/user/{id}','UserResourceApiController@show');
 Route::middleware('auth:api')->get('/user','UserResourceApiController@index');
 Route::middleware('auth:api')->put('/user','UserResourceApiController@update');
