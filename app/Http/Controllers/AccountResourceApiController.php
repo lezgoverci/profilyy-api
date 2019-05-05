@@ -74,8 +74,13 @@ class AccountResourceApiController extends Controller
     public function update(Request $request)
     {
 
-        $account = Account::find($request->input('id'));
-        $account->password = Hash::make($request->input('password'));
+        $account = Account::find($request->input('account_id'));
+        $account->fname = $request->input('fname');
+        $account->lname = $request->input('lname');
+        $account->address = $request->input('address');
+        $account->phone = $request->input('phone');
+        $account->gender = $request->input('gender');
+        $account->facebook_username = $request->input('facebook_username');
         if($account->save()){
             return (new AccountResource($account))->response("Success", 200);
         }
